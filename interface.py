@@ -1,9 +1,8 @@
 import os
-import traceback
 from pathlib import Path
 from typing import Callable
 from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.QtWidgets import QMainWindow, QFileDialog, QDialog
+from PyQt5.QtWidgets import QMainWindow, QFileDialog, QDialog, QMessageBox
 from add_more import AddMoreWindow
 from interface_ui import Ui_MainWindow
 from progress_ui import Ui_Dialog
@@ -168,7 +167,7 @@ class Interface(QMainWindow, Ui_MainWindow):
         :param str error_message: The error message emitted by the worker.
         """
         self.progress_dialog.hide()
-        # Show the error message to the user, implementation depends on your QMessageBox usage
+        self._show_error_msg('Runtime Error', 'Compilation Failed', error_message)
 
     def _handle_finished(self, pdf_path: Path):
         """
@@ -229,6 +228,22 @@ class Interface(QMainWindow, Ui_MainWindow):
         """
         dir_path = QFileDialog().getExistingDirectory(self)
         input_field.setText(dir_path)
+
+    def _show_error_msg(self, title: str, text: str, desc: str):
+        """
+        Show an error message box with the specified title, text, and description.
+
+        :param str title: The title of the message box.
+        :param str text: The main text of the message box.
+        :param str desc: Additional description for the error.
+        """
+        msg = QMessageBox(self)
+        msg.setWindowIcon(QIcon(self.icon))
+        msg.setIcon(QMessageBox.Critical)
+        msg.setInformativeText(desc)
+        msg.setWindowTitle(title)
+        msg.setText(text)
+        msg.exec_()
 
 
 class Dialog(QDialog, Ui_Dialog):
