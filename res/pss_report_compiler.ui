@@ -187,15 +187,15 @@
        </widget>
       </item>
       <item row="3" column="0">
-       <widget class="QGroupBox" name="utility_group">
+       <widget class="QGroupBox" name="util_group">
         <property name="title">
          <string>Utility Fault Data</string>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_21">
          <item>
-          <layout class="QVBoxLayout" name="utilit_layout">
+          <layout class="QVBoxLayout" name="util_layout">
            <item>
-            <widget class="QLineEdit" name="utility_input">
+            <widget class="QLineEdit" name="util_input">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -211,9 +211,9 @@
             </widget>
            </item>
            <item>
-            <layout class="QHBoxLayout" name="utility_btn_layout">
+            <layout class="QHBoxLayout" name="util_btn_layout">
              <item>
-              <widget class="QPushButton" name="utility_browse_btn">
+              <widget class="QPushButton" name="util_browse_btn">
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -226,7 +226,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QCheckBox" name="utility_default_cb">
+              <widget class="QCheckBox" name="util_default_cb">
                <property name="text">
                 <string>Default Folder</string>
                </property>
@@ -236,7 +236,7 @@
               </widget>
              </item>
              <item>
-              <spacer name="utility_spacer">
+              <spacer name="util_spacer">
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
                </property>
@@ -449,32 +449,80 @@
      <height>21</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuFile">
+   <property name="nativeMenuBar">
+    <bool>true</bool>
+   </property>
+   <widget class="QMenu" name="menu_file">
+    <property name="tearOffEnabled">
+     <bool>false</bool>
+    </property>
     <property name="title">
      <string>File</string>
     </property>
+    <addaction name="action_save_inputs"/>
+    <addaction name="action_save_as_inputs"/>
+    <addaction name="action_load_inputs"/>
+    <addaction name="action_load_as_inputs"/>
+    <addaction name="action_defaults"/>
+    <addaction name="action_exit"/>
    </widget>
-   <widget class="QMenu" name="menuEdit">
+   <widget class="QMenu" name="menu_edit">
     <property name="title">
      <string>Edit</string>
     </property>
    </widget>
-   <widget class="QMenu" name="menuHelp">
+   <widget class="QMenu" name="menu_help">
     <property name="title">
      <string>Help</string>
     </property>
    </widget>
-   <widget class="QMenu" name="menuAbout">
+   <widget class="QMenu" name="menu_about">
     <property name="title">
      <string>About</string>
     </property>
    </widget>
-   <addaction name="menuFile"/>
-   <addaction name="menuEdit"/>
-   <addaction name="menuHelp"/>
-   <addaction name="menuAbout"/>
+   <addaction name="menu_file"/>
+   <addaction name="menu_edit"/>
+   <addaction name="menu_help"/>
+   <addaction name="menu_about"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="action_save_inputs">
+   <property name="text">
+    <string>Save Inputs</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="action_save_as_inputs">
+   <property name="text">
+    <string>Save As Inputs</string>
+   </property>
+  </action>
+  <action name="action_load_inputs">
+   <property name="text">
+    <string>Load Inputs</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+L</string>
+   </property>
+  </action>
+  <action name="action_load_as_inputs">
+   <property name="text">
+    <string>Load As Inputs</string>
+   </property>
+  </action>
+  <action name="action_exit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </action>
+  <action name="action_defaults">
+   <property name="text">
+    <string>Defaults</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections>
@@ -559,9 +607,9 @@
    </hints>
   </connection>
   <connection>
-   <sender>utility_default_cb</sender>
+   <sender>util_default_cb</sender>
    <signal>toggled(bool)</signal>
-   <receiver>utility_browse_btn</receiver>
+   <receiver>util_browse_btn</receiver>
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -575,9 +623,9 @@
    </hints>
   </connection>
   <connection>
-   <sender>utility_default_cb</sender>
+   <sender>util_default_cb</sender>
    <signal>toggled(bool)</signal>
-   <receiver>utility_input</receiver>
+   <receiver>util_input</receiver>
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">

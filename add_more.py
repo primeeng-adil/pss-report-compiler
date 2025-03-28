@@ -2,7 +2,6 @@ from pathlib import Path
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QWidget, QFileDialog, QMessageBox, QListWidget
-
 from add_more_ui import Ui_Form
 
 # Constants for messages and titles
@@ -17,16 +16,16 @@ class AddMoreWindow(QWidget, Ui_Form):
     window_closed = pyqtSignal()
     window_confirmed = pyqtSignal()
 
-    def __init__(self, icon_path: str, initial_data: dict[str, str], *args, **kwargs):
+    def __init__(self, icon: QIcon, initial_data: dict[str, str], *args, **kwargs):
         """
         Initialize the AddMoreWindow with icon and initial data.
 
-        :param str icon_path: Path to the window icon.
+        :param QIcon icon: Window icon.
         :param dict initial_data: Initial data with headings as keys and paths as values.
         """
         super().__init__(*args, **kwargs)
         self.setupUi(self)
-        self.icon = QIcon(icon_path)
+        self.icon = icon
         self.setWindowIcon(self.icon)
         self._add_btn_connections()
         self._add_selection_rules()
@@ -76,6 +75,9 @@ class AddMoreWindow(QWidget, Ui_Form):
         :param QListWidget list_widget: The list widget containing the items.
         :param bool up: If True, moves the item up; otherwise, moves it down.
         """
+        if not list_widget.selectedItems():
+            return
+
         current_row = list_widget.currentRow()
         if current_row == -1:
             return
@@ -91,7 +93,17 @@ class AddMoreWindow(QWidget, Ui_Form):
         self.window_closed.emit()
 
     def confirm(self):
-        """Emit a signal when the confirmation button is clicked."""
+        """
+        Emit a signal when the confirmation button is clicked.
+
+        :raises ValueError: If the number of headings does not match the number of paths.
+        """
+        try:
+            if self.heading_list.count() != self.dir_list.count():
+                raise ValueError("The number of headings must match the number of paths.")
+        except ValueError as ve:
+            self._show_error_msg('Input Error', 'Data Validation Error', str(ve))
+            return
         self.window_confirmed.emit()
 
     def add_heading(self):
@@ -146,7 +158,7 @@ class AddMoreWindow(QWidget, Ui_Form):
         :param str desc: Additional description for the error.
         """
         msg = QMessageBox(self)
-        msg.setWindowIcon(QIcon(self.icon))
+        msg.setWindowIcon(self.icon)
         msg.setIcon(QMessageBox.Critical)
         msg.setInformativeText(desc)
         msg.setWindowTitle(title)
@@ -171,6 +183,9 @@ class AddMoreWindow(QWidget, Ui_Form):
 
         :param QListWidget list_widget: The list widget from which to remove the item.
         """
+        if not list_widget.selectedItems():
+            return
+
         current_row = list_widget.currentRow()
         if current_row != -1:
             list_widget.takeItem(current_row)
@@ -181,12 +196,8 @@ class AddMoreWindow(QWidget, Ui_Form):
 
         :return: A dictionary with headings as keys and paths as values.
         :rtype: dict[str, str]
-        :raises ValueError: If the number of headings does not match the number of paths.
         """
-        if self.heading_list.count() != self.dir_list.count():
-            raise ValueError("The number of headings must match the number of paths.")
-
         return {
-            self.heading_list.item(i).text(): self.dir_list.item(i).text()
+            self.heading_list.item(i).text().strip(): self.dir_list.item(i).text()
             for i in range(self.heading_list.count())
         }

@@ -1,0 +1,4 @@
+Short Circuit,SC,– Short Circuit Results
+Coordination,TCC,– Coordination Curves
+Utility,REF,– Utility Fault Data
+Reference,SLD,– System Model Data

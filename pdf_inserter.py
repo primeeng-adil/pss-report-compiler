@@ -17,12 +17,17 @@ def create_pdf_from_word(word_path: Path, output_path: Path) -> None:
     """
     word = win32com.client.Dispatch('Word.Application')
     word.DisplayAlerts = False
+    doc = None
     try:
         doc = word.Documents.Open(str(word_path))
         doc.ShowRevisions = False
         doc.PrintRevisions = False
         doc.SaveAs(str(output_path), FileFormat=WD_PDF_FORMAT)
         doc.Close()
+    except Exception as e:
+        if doc is not None:
+            doc.Close()
+        raise RuntimeError(f"{e}") from e
     finally:
         word.Quit()
         gc.collect()
